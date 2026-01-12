@@ -54,11 +54,12 @@ class PatternAnalys:
             
             
             cv2.rectangle(img=frame, pt1=top_left, pt2=bottom_right, color=(0, 255, 0), thickness=2)
-
+            print(f"🔍 схожість {max_val * 100:.2f}%")
             # Для візуального тестування
-            # cv2.circle(img=frame, center=(center_x, center_y), color=(0,255,0), radius=10, thickness=2)
-            # cv2.imshow("Result", frame)
-            # cv2.waitKey()
+            cv2.rectangle(img=frame, pt1=(x_start, y_start), pt2=(x_end, y_end), color=(0, 0, 255), thickness=2)
+            cv2.circle(img=frame, center=(center_x, center_y), color=(0,255,0), radius=5, thickness=2)
+            cv2.imshow("Result", frame)
+            cv2.waitKey()
 
             return center_x, center_y
         else:
@@ -71,10 +72,27 @@ if __name__ == "__main__":
     
     main_skill = PatternAnalys(
         template = "assets/main_skill.png",
-        roi = ((500,850), (1350,1700)),
+        roi = ((575,800), (1400, 1650)),
         to_gray=True,
-        threshold=0.2)
+        threshold=0.1)
+    
+    main_attack = PatternAnalys(
+        template="assets/main_attack.png",
+        roi=((800, 990), (1350, 1550)),
+        to_gray=True,
+        threshold=0.2
+    )
 
-    frame = cv2.imread("assets/test.png")
-    if frame is not None:
-        print(main_skill.start(frame=frame))
+    second_attack = PatternAnalys(
+        template="assets/second_attack.png",
+        roi=((500, 700), (1600, 1800)),
+        to_gray=True,
+        threshold=0.1
+    )
+
+
+
+    for i in range(1, 4):
+        frame = cv2.imread(f"assets/frame_{i}.png")
+        if frame is not None:
+            print(main_skill.start(frame=frame))
